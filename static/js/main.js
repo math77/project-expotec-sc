@@ -8,12 +8,14 @@ $(document).ready(function(){
       $.ajax({ type: "GET", url: "http://localhost/project-expotec/functions/getAllMessages.php", success: function(response){
 	$("#dados").html("");
         var tam = response.length;
+        console.log(response);
 
         for(var i = 0; i < tam; i++){
           var id = response[i].id;
           var message = response[i].message;
           var date = response[i].date;
           var issuer = response[i].issuer;
+          var image = response[i].image;
           var p = document.createElement("p");
           var card;
 
@@ -30,7 +32,7 @@ $(document).ready(function(){
 
         poll();
       }, dataType: "json"});
-    }, 30000);
+    }, 120000);
   })();
 
   //Manter conexão com server via php.
@@ -47,12 +49,15 @@ $(document).ready(function(){
   $('#newMessage').submit(function (e){
 
     var data = $('#newMessage').serialize();
+    var data2 = new FormData(this);
     console.log(data);
     $.ajax({
       type: 'POST',
       url: 'http://localhost/project-expotec/functions/saveMessage.php',
       async: true,
-      data: data,
+      data: data2,
+      processData: false,
+      contentType: false,
       success: function(response){
             console.log(JSON.stringify(data));
             $('#resposta').html(response);

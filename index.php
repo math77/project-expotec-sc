@@ -59,7 +59,7 @@ and open the template in the editor.
 
                </div>
               <div class="modal-body">
-                <form id="newMessage" action="" method="POST">
+                <form id="newMessage" action="" method="POST" enctype="multipart/form-data">
                   <div class="form-group">
                     <label for="issuer">Qual o seu nome?</label>
                     <input type="text" class="form-control" name="pIssuer" id="issuer" autofocus>
@@ -83,7 +83,7 @@ and open the template in the editor.
                   </div>
                   <button type="submit" class="btn btn-outline-success">Publicar</button>
                   <label class="btn btn-primary btn-file">
-                    Escolha <input type="file" style="display: none;" id="uploadedImage">
+                    Escolha <input type="file" style="display: none;" id="uploadedImage" name="postImage">
                   </label
                 </form>
                </div>

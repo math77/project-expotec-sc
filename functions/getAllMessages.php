@@ -13,7 +13,8 @@ if($posts != null){
     $data[] = array("id" => $post->getId(),
                     "message" => $post->getBodyMessage(),
                     "date" => implode('/', array_reverse(explode('-', $date[0]))),
-                    "issuer" => $post->getIssuerName());
+                    "issuer" => $post->getIssuerName(),
+                    "image" => $post->getImage());
   }
 
   echo json_encode($data);

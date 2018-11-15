@@ -14,6 +14,7 @@ class Message {
     private $bodyMessage;
     private $issuerName;
     private $issuerCampi;
+    private $image;
 
     public function getId() {
         return $this->id;
@@ -33,6 +34,10 @@ class Message {
 
     public function getIssuerCampi() {
         return $this->issuerCampi;
+    }
+
+    public function getImage(){
+        return $this->image;
     }
 
     public function setId($id) {
@@ -55,12 +60,12 @@ class Message {
         $this->issuerCampi = $issuerCampi;
     }
 
-    public function saveMessage(){
-        return MessageDAO::saveMessage($this->bodyMessage, $this->issuerName, $this->issuerCampi);
+    public function setImage($image){
+        $this->image = $image;
     }
 
-    public function serialize($message){
-      return get_object_vars($message);
+    public function saveMessage(){
+        return MessageDAO::saveMessage($this->bodyMessage, $this->issuerName, $this->issuerCampi, $this->image);
     }
 
     public static function getAllMessages(){
@@ -74,7 +79,7 @@ class Message {
               $message->setBodyMessage($obj['body_message']);
               $message->setDate($obj['date_send']);
               $message->setIssuerName($obj['issuer_name']);
-              //$dado = serialize($message);
+              $message->setImage($obj['image']);
               $posts[] = $message;
             }
         }

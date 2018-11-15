@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__FILE__).'/../classes/Message.php';
+require_once dirname(__FILE__).'/../services/Useful.php';
 
 //$dados = json_decode($_POST['dados'], true);
 
@@ -15,7 +16,13 @@ $issuerCampi = filter_input(INPUT_POST, 'pCampi', FILTER_SANITIZE_STRING);
 $message->setBodyMessage($bodyMessage);
 $message->setIssuerName($issuerName);
 $message->setIssuerCampi($issuerCampi);
-//$message->setDate($date);
+
+if(isset($_FILES["postImage"])){
+    $postImage = $_FILES["postImage"];
+    $path = Useful::saveImage($postImage);
+    $message->setImage($path);
+}
+
 
 if($message->saveMessage()){
   echo json_encode(array('mensagem' => "Salvo com sucesso"));
