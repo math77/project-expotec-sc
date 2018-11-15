@@ -9,9 +9,10 @@ $data = array();
 if($posts != null){
 
   foreach ($posts as $post) {
+    $date = explode(" ", $post->getDate());
     $data[] = array("id" => $post->getId(),
                     "message" => $post->getBodyMessage(),
-                    "date" => $post->getDate(),
+                    "date" => implode('/', array_reverse(explode('-', $date[0]))),
                     "issuer" => $post->getIssuerName());
   }
 

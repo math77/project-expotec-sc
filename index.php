@@ -9,10 +9,11 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title></title>
+	      <link rel="shortcut icon" href="static/img/expotec3.png" type="image/png" />
+        <title>Semana de humanidades</title>
 
         <link href="static/css/bootstrap.min.css" rel="stylesheet">
+        <link href="static/css/main.css" rel="stylesheet">
     </head>
     <body>
         <nav class="navbar navbar-expand-sm bg-light" style="background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);">
@@ -44,8 +45,9 @@ and open the template in the editor.
         -->
         </div>
         <!-- Fim da área de marketing -->
-        <div class="container mt-4" id="dados">
-          <div class="row"></div>
+        <h4 class="text-center">Veja as mensagens que já enviaram</h4>
+        <div class="card-columns" id="dados">
+
         </div>
         <!-- Modal para cadastro de nova mensagem-->
         <div class="modal fade" id="modal-mensagem">
@@ -60,7 +62,7 @@ and open the template in the editor.
                 <form id="newMessage" action="" method="POST">
                   <div class="form-group">
                     <label for="issuer">Qual o seu nome?</label>
-                    <input type="text" class="form-control" name="pIssuer" id="issuer">
+                    <input type="text" class="form-control" name="pIssuer" id="issuer" autofocus>
                   </div>
                   <div class="form-group">
                     <label for="campi">Qual o seu campus?</label>
@@ -80,6 +82,9 @@ and open the template in the editor.
                     <textarea class="form-control" rows="3" name="pMessage" id="msg"></textarea>
                   </div>
                   <button type="submit" class="btn btn-outline-success">Publicar</button>
+                  <label class="btn btn-primary btn-file">
+                    Escolha <input type="file" style="display: none;" id="uploadedImage">
+                  </label
                 </form>
                </div>
               <div class="modal-footer">
