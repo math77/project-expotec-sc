@@ -2,6 +2,9 @@
 
 require_once dirname(__FILE__).'/../classes/Message.php';
 
+
+
+
 $posts = Message::getAllMessages();
 
 $data = array();
@@ -14,7 +17,8 @@ if($posts != null){
                     "message" => $post->getBodyMessage(),
                     "date" => implode('/', array_reverse(explode('-', $date[0]))),
                     "issuer" => $post->getIssuerName(),
-                    "image" => $post->getImage());
+                    "image" => $post->getImage(),
+                    "campi" => $post->getIssuerCampi());
   }
 
   echo json_encode($data);

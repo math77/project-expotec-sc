@@ -17,7 +17,8 @@ class MessageDAO {
     }
 
     public static function getAllMessages(){
-        $query = "SELECT id, body_message, date_send, issuer_name, image FROM Message";
+        $query = "SELECT id, body_message, date_send, issuer_name, image, Campi.name_campi AS campi FROM Message, Campi
+        WHERE Message.issuer_campi = Campi.id_campi";
         return Connection::executar($query);
     }
 }

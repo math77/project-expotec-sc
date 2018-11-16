@@ -16,7 +16,7 @@ class Connection {
     private $usr = "root";
     private $pass = "root";
     private $url = "127.0.0.1";
-    private $database = "project_expotec";
+    private $database = "dizai_database";
 
 
     private function getConnection() {

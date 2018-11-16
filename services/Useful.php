@@ -15,7 +15,7 @@
           $fileName = Useful::generateImageId($image["name"]);
           $finalDestination = $destiny.$fileName;
           if(move_uploaded_file($image["tmp_name"], $finalDestination)){
-              return $finalDestination;
+              return $fileName;
           }
       }
   }

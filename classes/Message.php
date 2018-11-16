@@ -80,6 +80,7 @@ class Message {
               $message->setDate($obj['date_send']);
               $message->setIssuerName($obj['issuer_name']);
               $message->setImage($obj['image']);
+              $message->setIssuerCampi($obj['campi']);
               $posts[] = $message;
             }
         }

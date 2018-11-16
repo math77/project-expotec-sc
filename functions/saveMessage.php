@@ -3,9 +3,6 @@
 require_once dirname(__FILE__).'/../classes/Message.php';
 require_once dirname(__FILE__).'/../services/Useful.php';
 
-//$dados = json_decode($_POST['dados'], true);
-
-//$date = date('Y-m-d');
 
 $message = new Message();
 
@@ -17,7 +14,7 @@ $message->setBodyMessage($bodyMessage);
 $message->setIssuerName($issuerName);
 $message->setIssuerCampi($issuerCampi);
 
-if(isset($_FILES["postImage"])){
+if(isset($_FILES["postImage"]) && !empty($_FILES["postImage"])){
     $postImage = $_FILES["postImage"];
     $path = Useful::saveImage($postImage);
     $message->setImage($path);

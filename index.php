@@ -79,7 +79,7 @@ and open the template in the editor.
                   </div>
                   <div class="form-group">
                     <label for="msg">Deixe sua mensagem</label>
-                    <textarea class="form-control" rows="3" name="pMessage" id="msg"></textarea>
+                    <textarea class="form-control" rows="3" name="pMessage" id="msg" required></textarea>
                   </div>
                   <button type="submit" class="btn btn-outline-success">Publicar</button>
                   <label class="btn btn-primary btn-file">

@@ -1,12 +1,12 @@
 $(document).ready(function(){
-  //getPosts();
+
 
   //Pode melhorar muito esse código aqui. DEPOIS VER ISSO.
   //Resolver problema de duplicação de dados.
   (function poll(){
     setTimeout(function(){
-      $.ajax({ type: "GET", url: "http://localhost/project-expotec/functions/getAllMessages.php", success: function(response){
-	$("#dados").html("");
+      $.ajax({ type: "GET", url: "functions/getAllMessages.php", success: function(response){
+	       $("#dados").html("");
         var tam = response.length;
         console.log(response);
 
@@ -16,13 +16,14 @@ $(document).ready(function(){
           var date = response[i].date;
           var issuer = response[i].issuer;
           var image = response[i].image;
+          var campi = response[i].campi;
           var p = document.createElement("p");
           var card;
 
-          if(i % 2 == 0){
-            card = centralizedTextCard(issuer, message, date);
-          }else{
-            card = cardWithLeftText(issuer, message, date);
+          if(i % 2 == 0 && image == null || image == ""){
+            card = centralizedTextCard(issuer, message, date, campi);
+          }else {
+            card = cardWithLeftText(issuer, message, date, image, campi);
           }
 
           $("#dados").append(card);
@@ -32,7 +33,7 @@ $(document).ready(function(){
 
         poll();
       }, dataType: "json"});
-    }, 120000);
+    }, 30000);
   })();
 
   //Manter conexão com server via php.
@@ -53,7 +54,7 @@ $(document).ready(function(){
     console.log(data);
     $.ajax({
       type: 'POST',
-      url: 'http://localhost/project-expotec/functions/saveMessage.php',
+      url: 'functions/saveMessage.php',
       async: true,
       data: data2,
       processData: false,
@@ -63,8 +64,8 @@ $(document).ready(function(){
             $('#resposta').html(response);
             clearFields();
       },
-      error: function(){
-	    	$('#opa').html("error!");
+      error: function(response){
+	    	$('#opa').html(response);
         clearFields();
 	    }
     });
@@ -77,74 +78,76 @@ $(document).ready(function(){
 function clearFields(){
   $("#newMessage input").val("");
   $("#msg").val("");
+  $("#resposta").html("");
 }
 
-function centralizedTextCard(issuer, message, date){
-    var card = '<div class="card text-center">'+
-        '<div class="card-body">'+
-        '<h4 class="card-title">'+issuer+'</h4>'+
-        '<p>'+message+'</p>'+
-        '<p class="card-text"><small class="text-muted">'+date+'</small></p>'+
-        '</div>'+
-        '</div>';
-    return card;
+
+function centralizedTextCard(issuer, message, date, campi){
+    var cardDiv = document.createElement("div");
+    var cardBody = document.createElement("div");
+    var cardTitle = document.createElement("h4");
+    var cardMessage = document.createElement("p");
+    var cardText = document.createElement("p");
+    var textMuted = document.createElement("small");
+    var cardCampus = document.createElement("small");
+
+    $(cardDiv).attr("class", "card text-center");
+    $(cardBody).attr("class", "card-body");
+    $(cardTitle).attr("class", "card-title");
+    $(cardText).attr("class", "card-text");
+    $(textMuted).attr("class", "text-muted");
+    $(cardCampus).attr("class", "text-muted");
+
+    $(cardTitle).html(issuer);
+    $(cardMessage).html(message);
+    $(textMuted).html(date);
+    $(cardCampus).html(campi+" - ");
+
+    cardDiv.appendChild(cardBody);
+    cardBody.appendChild(cardTitle);
+    cardBody.appendChild(cardMessage);
+    cardBody.appendChild(cardText);
+    cardText.appendChild(cardCampus);
+    cardText.appendChild(textMuted);
+    return cardDiv;
 }
 
-function cardWithLeftText(issuer, message, date){
-    var card = '<div class="card">'+
-          '<div class="card-body">'+
-          '<h4 class="card-title">'+issuer+'</h4>'+
-          '<p class="card-text">'+message+'</p>'+
-          '<p class="card-text"><small class="text-muted">'+date+'</small></p>'+
-          '</div>'+
-          '</div>';
-    return card;
+
+function cardWithLeftText(issuer, message, date, image, campi){
+    var cardDiv = document.createElement("div");
+    var cardBody = document.createElement("div");
+    var cardTitle = document.createElement("h4");
+    var cardMessage = document.createElement("p");
+    var cardText = document.createElement("p");
+    var cardCampus = document.createElement("small");
+    var textMuted = document.createElement("small");
+
+    $(cardDiv).attr("class", "card");
+    $(cardBody).attr("class", "card-body");
+    $(cardTitle).attr("class", "card-title");
+    $(cardMessage).attr("class", "card-text");
+    $(cardText).attr("class", "card-text");
+    $(textMuted).attr("class", "text-muted");
+    $(cardCampus).attr("class", "text-muted");
+
+    $(cardTitle).html(issuer);
+    $(cardMessage).html(message);
+    $(textMuted).html(date);
+    $(cardCampus).html(campi+" - ");
+
+    if(image != null){
+      var cardImage = document.createElement("img");
+      $(cardImage).attr("class", "card-img-top img-fluid");
+      $(cardImage).attr("src", "uploads/"+image);
+      cardDiv.appendChild(cardImage);
+    }
+
+    cardDiv.appendChild(cardBody);
+    cardBody.appendChild(cardTitle);
+    cardBody.appendChild(cardMessage);
+    cardBody.appendChild(cardText);
+    cardText.appendChild(cardCampus);
+    cardText.appendChild(textMuted);
+
+    return cardDiv;
 }
-
-function pictureCard(issuer, message, date, image){
-    var card = '<div class="card">'+
-          '<img class="card-img-top img-fluid" src="https://img.webnots.com/2017/04/Bootstrap-Card-Image.png" alt="Card Columns 2">'+
-          '<div class="card-body">'+
-          '<h4 class="card-title">'+issuer+'</h4>'+
-          '<p class="card-text">'+message+'</p>'+
-          '<p class="card-text"><small class="text-muted">'+date+'</small></p>'+
-          '</div>'+
-          '</div>';
-    return card;
-}
-
-/*
-function getPosts(){
-
-  $.ajax({
-	    type: 'GET',
-	    url: "http://localhost/project-expotec/functions/getAllMessages.php",
-	    dataType: 'json',
-	    success: function(response){
-	    	console.log(response);
-        var tam = response.length;
-
-        for(var i = 0; i < tam; i++){
-          var id = response[i].id;
-          var message = response[i].message;
-          var date = response[i].date;
-          var issuer = response[i].issuer;
-          var p = document.createElement("p");
-          var card = "<div class='col-auto mb-3>'"+
-          "<div class='card' style='width: 18rem;'>"+
-          "<div class='card-body'>"+
-          "<h5 class='card-title'>"+issuer+"</h5>"+
-          "<h6 class='card-subtitle mb-2 text-muted'>"+date+"</h6>"+
-          "<p class='card-text'>"+message+"</p>"+
-          "</div></div></div>";
-          p.innerHTML = message;
-          $(".row").append(card);
-        }
-
-	    },
-	    error: function(){
-	    	$('#opa').html("error!");
-	    }
-	});
-}
-*/
