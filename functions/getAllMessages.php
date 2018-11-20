@@ -2,15 +2,15 @@
 
 require_once dirname(__FILE__).'/../classes/Message.php';
 
+$page = $_POST['page'];
+$qntd = 3;
+$inicio = $qntd * $page;
 
-
-
-$posts = Message::getAllMessages();
+$posts = Message::getAllMessagesLimit($inicio, $qntd);
 
 $data = array();
 
 if($posts != null){
-
   foreach ($posts as $post) {
     $date = explode(" ", $post->getDate());
     $data[] = array("id" => $post->getId(),
@@ -21,8 +21,7 @@ if($posts != null){
                     "campi" => $post->getIssuerCampi());
   }
 
-  echo json_encode($data);
-}else{
-    echo json_encode(array('mensagem' =>  'Ooops, não há nenhuma publicação'));
+  header('Content-type: application/json');
+  echo json_encode($data, true);
 }
  ?>

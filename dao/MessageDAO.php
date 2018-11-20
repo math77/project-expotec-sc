@@ -15,10 +15,10 @@ class MessageDAO {
 
         return Connection::executar($query);
     }
-
-    public static function getAllMessages(){
+    
+    public static function getAllMessagesLimit($inicio, $qtd){
         $query = "SELECT id, body_message, date_send, issuer_name, image, Campi.name_campi AS campi FROM Message, Campi
-        WHERE Message.issuer_campi = Campi.id_campi";
+        WHERE Message.issuer_campi = Campi.id_campi LIMIT $inicio, $qtd";
         return Connection::executar($query);
     }
 }

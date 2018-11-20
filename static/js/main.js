@@ -1,57 +1,38 @@
+var page = 0;
+
 $(document).ready(function(){
+    getData();
 
+  $(window).scroll(function(){
+    if($(window).scrollTop() + $(window).height() >= $(document).height()){
+        page += 1;
+        getData();
+      }
+  });
 
-  //Pode melhorar muito esse código aqui. DEPOIS VER ISSO.
-  //Resolver problema de duplicação de dados.
-  (function poll(){
-    setTimeout(function(){
-      $.ajax({ type: "GET", url: "functions/getAllMessages.php", success: function(response){
-	       $("#dados").html("");
-        var tam = response.length;
-        console.log(response);
+  $("#fechar").click(function(){
+    clearFields();
+  });
 
-        for(var i = 0; i < tam; i++){
-          var id = response[i].id;
-          var message = response[i].message;
-          var date = response[i].date;
-          var issuer = response[i].issuer;
-          var image = response[i].image;
-          var campi = response[i].campi;
-          var p = document.createElement("p");
-          var card;
+  $("#cancelar").click(function(){
+    clearFields();
+  });
 
-          if(i % 2 == 0 && image == null || image == ""){
-            card = centralizedTextCard(issuer, message, date, campi);
-          }else {
-            card = cardWithLeftText(issuer, message, date, image, campi);
-          }
-
-          $("#dados").append(card);
-        }
-
-
-
-        poll();
-      }, dataType: "json"});
-    }, 30000);
-  })();
-
-  //Manter conexão com server via php.
   $("#uploadedImage").change(function(){
 		var reader = new FileReader();
 		reader.readAsDataURL($("#uploadedImage")[0].files[0]);
 
 		reader.onload = function(event){
+      $("#uploadedPreview").attr('class', 'rounded float-right');
 			$("#uploadedPreview").attr('src', event.target.result);
 		};
 
 	});
 
+
   $('#newMessage').submit(function (e){
 
-    var data = $('#newMessage').serialize();
     var data2 = new FormData(this);
-    console.log(data);
     $.ajax({
       type: 'POST',
       url: 'functions/saveMessage.php',
@@ -60,13 +41,10 @@ $(document).ready(function(){
       processData: false,
       contentType: false,
       success: function(response){
-            console.log(JSON.stringify(data));
-            $('#resposta').html(response);
-            clearFields();
+          showMessage("Obrigado por contribuir!!!", "text-left text-success font-weight-bold");
       },
       error: function(response){
-	    	$('#opa').html(response);
-        clearFields();
+  	    	showMessage("Ooops, ocorreu um erro. Tente novamente", "text-warning font-weight-bold");
 	    }
     });
 
@@ -76,9 +54,56 @@ $(document).ready(function(){
 
 
 function clearFields(){
+  $("#resposta").html("");
   $("#newMessage input").val("");
   $("#msg").val("");
-  $("#resposta").html("");
+}
+
+function showMessage(mensagem, classe){
+    $("#resposta").attr('class', classe);
+    $("#resposta").html(mensagem);
+}
+
+function getData(){
+
+    $.ajax({
+        type: 'POST',
+        url: 'functions/getAllMessages.php',
+        data: 'page='+page,
+        cache: false,
+        success: function(response){
+            displayData(response);
+        },
+        error:function(response){
+          console.log("Erro aqui");
+        }
+    });
+}
+
+function displayData(response){
+  var tam = response.length;
+  console.log(response);
+  if(tam > 0){
+  for(var i = 0; i < tam; i++){
+    var id = response[i].id;
+    var message = response[i].message;
+    var date = response[i].date;
+    var issuer = response[i].issuer;
+    var image = response[i].image;
+    var campi = response[i].campi;
+    var card;
+
+    if(i % 2 == 0 && image == null || image == ""){
+      card = centralizedTextCard(issuer, message, date, campi);
+    }else {
+      card = cardWithLeftText(issuer, message, date, image, campi);
+    }
+
+    $("#dados").append(card);
+  }
+}else{
+    $("#fimConteudo").html("Ooops, não há mais postagens");
+}
 }
 
 
@@ -91,7 +116,7 @@ function centralizedTextCard(issuer, message, date, campi){
     var textMuted = document.createElement("small");
     var cardCampus = document.createElement("small");
 
-    $(cardDiv).attr("class", "card text-center");
+    $(cardDiv).attr("class", "card text-center shadow p-3 mb-5 bg-white rounded");
     $(cardBody).attr("class", "card-body");
     $(cardTitle).attr("class", "card-title");
     $(cardText).attr("class", "card-text");
@@ -122,7 +147,7 @@ function cardWithLeftText(issuer, message, date, image, campi){
     var cardCampus = document.createElement("small");
     var textMuted = document.createElement("small");
 
-    $(cardDiv).attr("class", "card");
+    $(cardDiv).attr("class", "card shadow p-3 mb-5 bg-white rounded");
     $(cardBody).attr("class", "card-body");
     $(cardTitle).attr("class", "card-title");
     $(cardMessage).attr("class", "card-text");
@@ -150,4 +175,4 @@ function cardWithLeftText(issuer, message, date, image, campi){
     cardText.appendChild(textMuted);
 
     return cardDiv;
-}
+  }

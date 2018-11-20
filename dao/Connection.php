@@ -21,7 +21,7 @@ class Connection {
 
     private function getConnection() {
         $conn = new mysqli($this->url, $this->usr, $this->pass, $this->database);
-        $conn->set_charset("utf-8");
+        $conn->set_charset("utf8");
         return $conn;
     }
 

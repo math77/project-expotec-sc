@@ -68,9 +68,35 @@ class Message {
         return MessageDAO::saveMessage($this->bodyMessage, $this->issuerName, $this->issuerCampi, $this->image);
     }
 
+    /*
     public static function getAllMessages(){
         $posts = array();
         $data = MessageDAO::getAllMessages();
+
+        if($data != null){
+            while($obj = $data->fetch_assoc()){
+              $message = new Message();
+              $message->setId($obj['id']);
+              $message->setBodyMessage($obj['body_message']);
+              $message->setDate($obj['date_send']);
+              $message->setIssuerName($obj['issuer_name']);
+              $message->setImage($obj['image']);
+              $message->setIssuerCampi($obj['campi']);
+              $posts[] = $message;
+            }
+        }
+        return $posts;
+    }
+    */
+
+    public static function getTotalRecords(){
+        $data = MessageDAO::getTotalRecords();
+        return $data->fetch_object()->total;
+    }
+
+    public static function getAllMessagesLimit($inicio, $qtd){
+        $posts = array();
+        $data = MessageDAO::getAllMessagesLimit($inicio, $qtd);
 
         if($data != null){
             while($obj = $data->fetch_assoc()){
