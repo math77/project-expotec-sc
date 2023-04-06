@@ -1,2 +1,1 @@
-# Site para semana de humanidades da VIII Expotec-SC
-[Vá para o site](http://jijel.ifrn.edu.br/dizai/)
+# Website for humanities week of VIII Expotec-SC (high school project)
